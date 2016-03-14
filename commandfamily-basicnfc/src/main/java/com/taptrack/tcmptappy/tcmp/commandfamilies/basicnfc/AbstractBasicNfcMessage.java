@@ -18,6 +18,9 @@ package com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc;
 
 import com.taptrack.tcmptappy.tcmp.TCMPMessage;
 
+/**
+ * Base class for all BasicNfc commands and responses
+ */
 public abstract class AbstractBasicNfcMessage extends TCMPMessage {
     @Override
     public byte[] getCommandFamily() {

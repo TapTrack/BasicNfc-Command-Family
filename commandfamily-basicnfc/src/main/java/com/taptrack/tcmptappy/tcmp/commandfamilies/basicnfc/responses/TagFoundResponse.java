@@ -22,6 +22,9 @@ import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.AbstractBasicNfcMess
 
 import java.util.Arrays;
 
+/**
+ * A tag has been found by the Tappy
+ */
 public class TagFoundResponse extends AbstractBasicNfcMessage {
     public static final byte COMMAND_CODE = 0x01;
     byte[] mTagCode;
@@ -45,11 +48,13 @@ public class TagFoundResponse extends AbstractBasicNfcMessage {
         return mTagType;
     }
 
-    public TagFoundResponse(byte[] payload) throws MalformedPayloadException {
+    public static TagFoundResponse fromPayload(byte[] payload) throws MalformedPayloadException {
         if(payload.length < 5) //at least a 4 byte uid
             throw new MalformedPayloadException();
-        mTagType  = payload[0];
-        mTagCode = Arrays.copyOfRange(payload, 1, payload.length);
+        byte mTagType  = payload[0];
+        byte[] mTagCode = Arrays.copyOfRange(payload, 1, payload.length);
+
+        return new TagFoundResponse(mTagCode,mTagType);
     }
 
     @Override

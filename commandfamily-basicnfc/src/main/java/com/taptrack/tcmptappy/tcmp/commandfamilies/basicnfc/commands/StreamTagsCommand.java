@@ -18,6 +18,10 @@ package com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands;
 
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.AbstractBasicNfcMessage;
 
+/**
+ * Tell the Tappy to continuously report tags it encounters
+ * until the timeout is reached.
+ */
 public class StreamTagsCommand extends AbstractBasicNfcMessage {
     public static final byte COMMAND_CODE = (byte)0x01;
     protected byte mDuration;
@@ -28,19 +32,23 @@ public class StreamTagsCommand extends AbstractBasicNfcMessage {
         mDuration = (byte) 0x00;
     }
 
-    public StreamTagsCommand(byte[] payload) {
+    public static StreamTagsCommand fromPayload(byte[] payload) {
+        byte duration;
+        byte type;
         if(payload.length >= 2) {
-            mDuration = payload[0];
-            mType = payload[1];
+            duration = payload[0];
+            type = payload[1];
         }
         else if (payload.length > 0) {
-            mType = (byte) 0x02;
-            mDuration = payload[0];
+            duration = payload[0];
+            type = (byte) 0x02;
         }
         else {
-            mType = (byte) 0x02;
-            mDuration = (byte) 0x00;
+            duration = (byte) 0x00;
+            type = (byte) 0x02;
         }
+
+        return new StreamTagsCommand(duration,type);
     }
 
     public StreamTagsCommand (byte duration) {

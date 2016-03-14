@@ -23,7 +23,8 @@ public class StopCommand extends AbstractBasicNfcMessage {
 
     public StopCommand() {}
 
-    public StopCommand(byte[] payload) {
+    public static StopCommand fromPayload(byte[] payload) {
+        return new StopCommand();
     }
 
     @Override

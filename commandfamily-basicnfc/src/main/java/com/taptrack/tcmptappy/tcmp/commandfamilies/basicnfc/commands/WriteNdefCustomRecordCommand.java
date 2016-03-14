@@ -16,12 +16,16 @@
 
 package com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands;
 
+import com.taptrack.tcmptappy.tcmp.MalformedPayloadException;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.AbstractBasicNfcMessage;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 
+/**
+ * Command the Tappy to write an arbitrary custom NDEF record to tags
+ */
 public class WriteNdefCustomRecordCommand extends AbstractBasicNfcMessage {
 
     public static final byte COMMAND_CODE = (byte)0x07;
@@ -35,26 +39,34 @@ public class WriteNdefCustomRecordCommand extends AbstractBasicNfcMessage {
         content = new byte[0];
     }
 
-    public WriteNdefCustomRecordCommand(byte[] payload) {
+    public WriteNdefCustomRecordCommand(byte duration, boolean lockTag, byte[] content) {
+        this.duration = duration;
+        this.lockflag = (byte) (lockTag ? 0x01: 0x00);
+        this.content = content;
+    }
+
+    public WriteNdefCustomRecordCommand(byte duration, byte lockTag, byte[] content) {
+        this.duration = duration;
+        this.lockflag = lockTag;
+        this.content = content;
+    }
+
+    public static WriteNdefCustomRecordCommand fromPayload(byte[] payload) throws MalformedPayloadException {
         if(payload.length >= 2) {
-            duration = payload[0];
-            lockflag = payload[1];
+            byte duration = payload[0];
+            byte lockflag = payload[1];
+            byte[] content;
             if(payload.length > 2) {
                 content = Arrays.copyOfRange(payload, 2, payload.length);
             }
             else {
                 content = new byte[0];
             }
+            return new WriteNdefCustomRecordCommand(duration,lockflag,content);
         }
         else {
-            throw new IllegalArgumentException("Invalid raw message");
+            throw new MalformedPayloadException("Invalid raw message");
         }
-    }
-
-    public WriteNdefCustomRecordCommand(byte duration, boolean lockTag, byte[] content) {
-        this.duration = duration;
-        this.lockflag = (byte) (lockTag ? 0x01: 0x00);
-        this.content = content;
     }
 
     public void setDuration(byte duration) {

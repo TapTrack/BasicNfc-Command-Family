@@ -18,6 +18,12 @@ package com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands;
 
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.AbstractBasicNfcMessage;
 
+/**
+ * Inform the Tappy to scan for tags. If the Tappy detects a tag, it will
+ * stop scanning.
+ *
+ * A timeout of zero corresponds to indefinite.
+ */
 public class ScanTagCommand extends AbstractBasicNfcMessage {
     public static final byte COMMAND_CODE = (byte)0x02;
     protected byte mTimeout;
@@ -28,19 +34,23 @@ public class ScanTagCommand extends AbstractBasicNfcMessage {
         mTimeout = (byte) 0x00;
     }
 
-    public ScanTagCommand(byte[] payload) {
+    public static ScanTagCommand fromPayload(byte[] payload) {
+        byte timeout;
+        byte type;
         if(payload.length >= 2) {
-            mTimeout = payload[0];
-            mType = payload[1];
+            timeout = payload[0];
+            type = payload[1];
         }
         else if (payload.length > 0) {
-            mType = (byte) 0x02;
-            mTimeout = payload[0];
+            type = (byte) 0x02;
+            timeout = payload[0];
         }
         else {
-            mType = (byte) 0x02;
-            mTimeout = (byte) 0x00;
+            type = (byte) 0x02;
+            timeout = (byte) 0x00;
         }
+
+        return new ScanTagCommand(timeout,type);
     }
 
     public ScanTagCommand(byte timeout) {

@@ -18,6 +18,9 @@ package com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands;
 
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.AbstractBasicNfcMessage;
 
+/**
+ * Tell the Tappy to continuously report NDEF-formatted tags that it detects
+ */
 public class StreamNdefCommand extends AbstractBasicNfcMessage {
     public static final byte COMMAND_CODE = (byte)0x03;
     protected byte mDuration;
@@ -26,11 +29,11 @@ public class StreamNdefCommand extends AbstractBasicNfcMessage {
         mDuration = (byte) 0x00;
     }
 
-    public StreamNdefCommand(byte[] payload) {
+    public static StreamNdefCommand fromPayload (byte[] payload) {
         if(payload.length > 0)
-            mDuration = payload[0];
+            return new StreamNdefCommand(payload[0]);
         else
-            mDuration = (byte) 0x00;
+            return new StreamNdefCommand((byte) 0x00);
     }
 
     public StreamNdefCommand(byte duration) {

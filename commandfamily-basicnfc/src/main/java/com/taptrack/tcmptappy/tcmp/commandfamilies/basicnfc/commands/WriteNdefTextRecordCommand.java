@@ -16,6 +16,7 @@
 
 package com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands;
 
+import com.taptrack.tcmptappy.tcmp.MalformedPayloadException;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.AbstractBasicNfcMessage;
 
 import java.io.ByteArrayOutputStream;
@@ -37,26 +38,34 @@ public class WriteNdefTextRecordCommand extends AbstractBasicNfcMessage {
         text = new byte[0];
     }
 
-    public WriteNdefTextRecordCommand(byte[] payload) {
-        if(payload.length >= 2) {
-            duration = payload[0];
-            lockflag = payload[1];
-            if(payload.length > 2) {
-                text = Arrays.copyOfRange(payload, 2, payload.length);
-            }
-            else {
-                text = new byte[0];
-            }
-        }
-        else {
-            throw new IllegalArgumentException("Invalid raw message");
-        }
-    }
-
     public WriteNdefTextRecordCommand(byte duration, boolean lockTag, byte[] text) {
         this.duration = duration;
         this.lockflag = (byte) (lockTag ? 0x01: 0x00);
         this.text = text;
+    }
+
+    public WriteNdefTextRecordCommand(byte duration, byte lockTag, byte[] text) {
+        this.duration = duration;
+        this.lockflag = lockTag;
+        this.text = text;
+    }
+
+    public static WriteNdefTextRecordCommand fromPayload(byte[] payload) throws MalformedPayloadException{
+        if(payload.length >= 2) {
+            byte duration = payload[0];
+            byte lockflag = payload[1];
+            byte[] textBytes;
+            if(payload.length > 2) {
+                textBytes = Arrays.copyOfRange(payload, 2, payload.length);
+            }
+            else {
+                textBytes = new byte[0];
+            }
+            return new WriteNdefTextRecordCommand(duration,lockflag,textBytes);
+        }
+        else {
+            throw new MalformedPayloadException("Invalid raw message");
+        }
     }
 
     public void setDuration(byte duration) {

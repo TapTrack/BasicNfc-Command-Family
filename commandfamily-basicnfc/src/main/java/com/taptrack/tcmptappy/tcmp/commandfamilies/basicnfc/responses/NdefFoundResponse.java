@@ -28,6 +28,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 
+/**
+ * The Tappy has found a tag with ndef-formatted data
+ */
 public class NdefFoundResponse extends AbstractBasicNfcMessage {
     public static final byte COMMAND_CODE = 0x02;
     byte[] mTagCode;
@@ -40,6 +43,41 @@ public class NdefFoundResponse extends AbstractBasicNfcMessage {
         mTagType = TagTypes.TAG_UNKNOWN;
     }
 
+    public NdefFoundResponse(byte[] mTagCode, byte mTagType, NdefMessage mMessage) {
+        this.mTagCode = mTagCode;
+        this.mTagType = mTagType;
+        this.mMessage = mMessage;
+    }
+
+    public static NdefFoundResponse fromPayload(byte[] payload) throws MalformedPayloadException {
+
+        if(payload.length < 2) throw new MalformedPayloadException("No control bytes");
+
+        byte mTagType = payload[0];
+        byte tagCodeLength = (byte) (payload[1] & 0xff);
+        byte[] mTagCode = Arrays.copyOfRange(payload, 2, tagCodeLength + 2);
+        byte[] ndefMessage = new byte[payload.length - (tagCodeLength + 2)];
+
+        //make sure ndef payload is not zero-length
+        if(payload.length > ((tagCodeLength & 0xff)+2)) {
+            System.arraycopy(payload,tagCodeLength+2,ndefMessage,0,(payload.length - tagCodeLength - 2));
+        }
+        NdefMessage message;
+        if(ndefMessage.length != 0) {
+            try {
+                message = new NdefMessage(ndefMessage);
+            } catch (FormatException e) {
+                e.printStackTrace();
+                throw new MalformedPayloadException("Bad Ndef Format");
+            }
+        }
+        else {
+            message = new NdefMessage(new NdefRecord(NdefRecord.TNF_EMPTY,null,null,null));
+        }
+
+        return new NdefFoundResponse(mTagCode,mTagType,message);
+    }
+
     public byte[] getTagCode() {
         return mTagCode;
     }
@@ -50,32 +88,6 @@ public class NdefFoundResponse extends AbstractBasicNfcMessage {
 
     public byte getTagType() {
         return mTagType;
-    }
-
-    public NdefFoundResponse(byte[] payload) throws MalformedPayloadException {
-
-        if(payload.length < 2) throw new MalformedPayloadException("No control bytes");
-
-        mTagType = payload[0];
-        byte tagCodeLength = (byte) (payload[1] & 0xff);
-        mTagCode = Arrays.copyOfRange(payload, 2, tagCodeLength + 2);
-        byte[] ndefMessage = new byte[payload.length - (tagCodeLength + 2)];
-
-        //make sure ndef payload is not zero-length
-        if(payload.length > ((tagCodeLength & 0xff)+2)) {
-            System.arraycopy(payload,tagCodeLength+2,ndefMessage,0,(payload.length - tagCodeLength - 2));
-        }
-        if(ndefMessage.length != 0) {
-            try {
-                mMessage = new NdefMessage(ndefMessage);
-            } catch (FormatException e) {
-                e.printStackTrace();
-                throw new MalformedPayloadException("Bad Ndef Format");
-            }
-        }
-        else {
-            mMessage = new NdefMessage(new NdefRecord(NdefRecord.TNF_EMPTY,null,null,null));
-        }
     }
 
     @Override

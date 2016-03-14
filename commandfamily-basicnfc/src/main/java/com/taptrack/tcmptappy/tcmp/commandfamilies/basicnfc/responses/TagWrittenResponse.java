@@ -6,6 +6,9 @@ import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.AbstractBasicNfcMess
 
 import java.util.Arrays;
 
+/**
+ * A tag has been written by the Tappy
+ */
 public class TagWrittenResponse extends AbstractBasicNfcMessage {
     public static final byte COMMAND_CODE = 0x05;
     byte[] mTagCode;
@@ -29,11 +32,12 @@ public class TagWrittenResponse extends AbstractBasicNfcMessage {
         return mTagType;
     }
 
-    public TagWrittenResponse(byte[] payload) throws MalformedPayloadException {
+    public static TagWrittenResponse fromPayload(byte[] payload) throws MalformedPayloadException {
         if(payload.length < 5) //at least a 4 byte uid
             throw new MalformedPayloadException();
-        mTagType  = payload[0];
-        mTagCode = Arrays.copyOfRange(payload, 1, payload.length);
+        byte tagType  = payload[0];
+        byte[] tagCode = Arrays.copyOfRange(payload, 1, payload.length);
+        return new TagWrittenResponse(tagCode,tagType);
     }
 
     @Override

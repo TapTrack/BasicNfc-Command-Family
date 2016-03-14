@@ -16,6 +16,7 @@
 
 package com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands;
 
+import com.taptrack.tcmptappy.tcmp.MalformedPayloadException;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.AbstractBasicNfcMessage;
 
 /**
@@ -26,7 +27,8 @@ public class GetBasicNfcLibraryVersionCommand extends AbstractBasicNfcMessage {
 
     public GetBasicNfcLibraryVersionCommand() {}
 
-    public GetBasicNfcLibraryVersionCommand(byte[] payload) {
+    public static GetBasicNfcLibraryVersionCommand fromPayload(byte[] payload) throws MalformedPayloadException {
+        return new GetBasicNfcLibraryVersionCommand();
     }
 
     @Override
