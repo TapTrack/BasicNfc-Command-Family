@@ -1,0 +1,74 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:1.5.0'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.3'
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
+    }
+}
+
+
+allprojects {
+    repositories {
+        jcenter()
+
+        maven {
+            //for demo app
+            url "https://jitpack.io"
+        }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+ext.globalCfg = [
+        minSdkVersion: 18,
+        compileSdkVersion: 23,
+        buildToolsVersion: "23.0.2",
+        publishedVersion: "0.1.1",
+        publishedGroupId : 'com.taptrack.tcmptappy',
+]
+
+ext.bintrayCfg = [
+        mavenInstallScript: rootProject.file('mavenInstaller.gradle'),
+        bintrayScript: rootProject.file('bintrayUpload.gradle'),
+
+        bintrayRepo : 'maven',
+
+        publishedArtifacts : [
+                basicNfcCommandFamily: [
+                        bintrayName : 'commandfamily-basicnfc',
+                        libraryName : 'Basic Nfc TCMP Command Family',
+                        artifact : 'commandfamily-basicnfc',
+                        libraryDescription : 'Command family for performing basic NFC operations',
+                ],
+        ],
+
+
+        siteUrl : 'https://github.com/TapTrack/Type4-Command-Family',
+        gitUrl : 'https://github.com/TapTrack/Type4-Command-Family.git',
+
+        developerId : "TapTrack",
+        developerName : "TapTrack",
+        developerEmail : "info@taptrack.com",
+
+        licenseName : 'The Apache Software License, Version 2.0',
+        licenseUrl : "http://www.apache.org/licenses/LICENSE-2.0.txt",
+        allLicenses : ["Apache-2.0"],
+]
+
+ext.libraries = [
+        androidSupportAnnotations: "com.android.support:support-annotations:23.1.1",
+        // common libraries
+        tcmpCommandFamilyCommon : "com.taptrack.tcmptappy:commandfamily-common:0.4.2",
+        tcmpTappyConstants : "com.taptrack.tcmptappy:tappy-constants:0.4.2",
+
+        junit : 'junit:junit:4.12',
+]
