@@ -16,6 +16,7 @@
 
 package com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc;
 
+import com.taptrack.tcmptappy.tcmp.TCMPMessage;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands.GetBasicNfcLibraryVersionCommand;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands.ScanNdefCommand;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands.ScanTagCommand;
@@ -41,67 +42,88 @@ public class BasicNfcCommandLibrary implements CommandFamily {
 
     @Override
     public com.taptrack.tcmptappy.tcmp.TCMPMessage parseCommand(com.taptrack.tcmptappy.tcmp.TCMPMessage message) throws CommandCodeNotSupportedException, MalformedPayloadException {
+        TCMPMessage parsedMessage;
         switch (message.getCommandCode()) {
             case GetBasicNfcLibraryVersionCommand.COMMAND_CODE:
-                return GetBasicNfcLibraryVersionCommand.fromPayload(message.getPayload());
+                parsedMessage = new GetBasicNfcLibraryVersionCommand();
+                break;
 
             case ScanNdefCommand.COMMAND_CODE:
-                return ScanNdefCommand.fromPayload(message.getPayload());
+                parsedMessage = new ScanNdefCommand();
+                break;
 
             case ScanTagCommand.COMMAND_CODE:
-                return ScanTagCommand.fromPayload(message.getPayload());
+                parsedMessage = new ScanTagCommand();
+                break;
 
             case StopCommand.COMMAND_CODE:
-                return StopCommand.fromPayload(message.getPayload());
+                parsedMessage = new StopCommand();
+                break;
 
             case StreamNdefCommand.COMMAND_CODE:
-                return StreamNdefCommand.fromPayload(message.getPayload());
+                parsedMessage = new StreamNdefCommand();
+                break;
 
             case StreamTagsCommand.COMMAND_CODE:
-                return StreamTagsCommand.fromPayload(message.getPayload());
+                parsedMessage = new StreamTagsCommand();
+                break;
 
             case WriteNdefCustomRecordCommand.COMMAND_CODE:
-                return WriteNdefCustomRecordCommand.fromPayload(message.getPayload());
+                parsedMessage = new WriteNdefCustomRecordCommand();
+                break;
 
             case WriteNdefTextRecordCommand.COMMAND_CODE:
-                return WriteNdefTextRecordCommand.fromPayload(message.getPayload());
+                parsedMessage = new WriteNdefTextRecordCommand();
+                break;
 
             case WriteNdefUriRecordCommand.COMMAND_CODE:
-                return WriteNdefUriRecordCommand.fromPayload(message.getPayload());
+                parsedMessage = new WriteNdefUriRecordCommand();
+                break;
 
             default:
                 throw new CommandCodeNotSupportedException(
                         BasicNfcCommandLibrary.class.getSimpleName() +
                                 " doesn't support response code " + String.format("%02X", message.getCommandCode()));
         }
+        parsedMessage.parsePayload(message.getPayload());
+        return parsedMessage;
     }
 
     @Override
     public com.taptrack.tcmptappy.tcmp.TCMPMessage parseResponse(com.taptrack.tcmptappy.tcmp.TCMPMessage message) throws ResponseCodeNotSupportedException, MalformedPayloadException {
+        TCMPMessage parsedMessage;
         switch (message.getCommandCode()) {
             case BasicNfcErrorResponse.COMMAND_CODE:
-                return BasicNfcErrorResponse.fromPayload(message.getPayload());
+                parsedMessage = new BasicNfcErrorResponse();
+                break;
 
             case BasicNfcLibraryVersionResponse.COMMAND_CODE:
-                return BasicNfcLibraryVersionResponse.fromPayload(message.getPayload());
+                parsedMessage = new BasicNfcLibraryVersionResponse();
+                break;
 
             case NdefFoundResponse.COMMAND_CODE:
-                return NdefFoundResponse.fromPayload(message.getPayload());
+                parsedMessage = new NdefFoundResponse();
+                break;
 
             case ScanTimeoutResponse.COMMAND_CODE:
-                return ScanTimeoutResponse.fromPayload(message.getPayload());
+                parsedMessage = new ScanTimeoutResponse();
+                break;
 
             case TagFoundResponse.COMMAND_CODE:
-                return TagFoundResponse.fromPayload(message.getPayload());
+                parsedMessage = new TagFoundResponse();
+                break;
 
             case TagWrittenResponse.COMMAND_CODE:
-                return TagWrittenResponse.fromPayload(message.getPayload());
+                parsedMessage = new TagWrittenResponse();
+                break;
 
             default:
                 throw new ResponseCodeNotSupportedException(
                         BasicNfcCommandLibrary.class.getSimpleName() +
                                 " doesn't support response code " + String.format("%02X", message.getCommandCode()));
         }
+        parsedMessage.parsePayload(message.getPayload());
+        return parsedMessage;
     }
 
     @Override

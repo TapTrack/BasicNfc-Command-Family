@@ -11,40 +11,48 @@ import java.util.Arrays;
  */
 public class TagWrittenResponse extends AbstractBasicNfcMessage {
     public static final byte COMMAND_CODE = 0x05;
-    byte[] mTagCode;
-    byte mTagType;
+    byte[] tagCode;
+    byte tagType;
 
     public TagWrittenResponse() {
-        mTagCode = new byte[7];
-        mTagType = TagTypes.TAG_UNKNOWN;
+        tagCode = new byte[7];
+        tagType = TagTypes.TAG_UNKNOWN;
+    }
+
+    @Override
+    public void parsePayload(byte[] payload) throws MalformedPayloadException {
+        if(payload.length < 5) //at least a 4 byte uid
+            throw new MalformedPayloadException();
+        tagType = payload[0];
+        tagCode = Arrays.copyOfRange(payload, 1, payload.length);
     }
 
     public TagWrittenResponse(byte[] tagCode, byte tagType) {
-        mTagCode = tagCode;
-        mTagType = tagType;
+        this.tagCode = tagCode;
+        this.tagType = tagType;
     }
 
     public byte[] getTagCode() {
-        return mTagCode;
+        return tagCode;
+    }
+
+    public void setTagCode(byte[] tagCode) {
+        this.tagCode = tagCode;
     }
 
     public byte getTagType() {
-        return mTagType;
+        return tagType;
     }
 
-    public static TagWrittenResponse fromPayload(byte[] payload) throws MalformedPayloadException {
-        if(payload.length < 5) //at least a 4 byte uid
-            throw new MalformedPayloadException();
-        byte tagType  = payload[0];
-        byte[] tagCode = Arrays.copyOfRange(payload, 1, payload.length);
-        return new TagWrittenResponse(tagCode,tagType);
+    public void setTagType(byte tagType) {
+        this.tagType = tagType;
     }
 
     @Override
     public byte[] getPayload() {
-        byte[] payload = new byte[mTagCode.length+1];
-        payload[0] = mTagType;
-        System.arraycopy(mTagCode,0,payload,1,mTagCode.length);
+        byte[] payload = new byte[tagCode.length+1];
+        payload[0] = tagType;
+        System.arraycopy(tagCode,0,payload,1, tagCode.length);
         return payload;
     }
 

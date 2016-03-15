@@ -27,8 +27,9 @@ public class GetBasicNfcLibraryVersionCommand extends AbstractBasicNfcMessage {
 
     public GetBasicNfcLibraryVersionCommand() {}
 
-    public static GetBasicNfcLibraryVersionCommand fromPayload(byte[] payload) throws MalformedPayloadException {
-        return new GetBasicNfcLibraryVersionCommand();
+    @Override
+    public void parsePayload(byte[] payload) throws MalformedPayloadException {
+
     }
 
     @Override

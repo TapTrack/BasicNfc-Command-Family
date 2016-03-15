@@ -25,6 +25,7 @@ public class WriteNdefUriRecordCommand extends AbstractBasicNfcMessage {
         uri = new byte[0];
     }
 
+
     public WriteNdefUriRecordCommand(byte duration, boolean lockTag, byte uriCode, byte[] uri) {
         this.duration = duration;
         this.lockflag = (byte) (lockTag ? 0x01: 0x00);
@@ -39,19 +40,18 @@ public class WriteNdefUriRecordCommand extends AbstractBasicNfcMessage {
         this.uri = uri;
     }
 
-    public static WriteNdefUriRecordCommand fromPayload (byte[] payload) throws MalformedPayloadException {
+    @Override
+    public void parsePayload(byte[] payload) throws MalformedPayloadException {
         if(payload.length >= 3) {
-            byte duration = payload[0];
-            byte lockflag = payload[1];
-            byte uriCode = payload[2];
-            byte[] uri;
+            duration = payload[0];
+            lockflag = payload[1];
+            uriCode = payload[2];
             if(payload.length > 3) {
                 uri = Arrays.copyOfRange(payload, 3, payload.length);
             }
             else {
                 uri = new byte[0];
             }
-            return new WriteNdefUriRecordCommand(duration,lockflag,uriCode,uri);
         }
         else {
             throw new MalformedPayloadException("Invalid raw message");

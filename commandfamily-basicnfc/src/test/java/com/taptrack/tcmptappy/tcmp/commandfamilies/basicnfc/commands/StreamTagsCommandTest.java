@@ -4,11 +4,11 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class ScanNdefCommandTest {
+public class StreamTagsCommandTest {
 
     @Test
     public void testGetCommandCode() throws Exception {
-        ScanNdefCommand command = new ScanNdefCommand();
-        assertEquals(command.getCommandCode(),0x04);
+        StreamTagsCommand command = new StreamTagsCommand();
+        assertEquals(command.getCommandCode(), 0x01);
     }
 }

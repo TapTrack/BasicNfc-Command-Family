@@ -16,41 +16,18 @@
 
 package com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands;
 
-import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.AbstractBasicNfcMessage;
-
 /**
  * Tell the Tappy to continuously report NDEF-formatted tags that it detects
  */
-public class StreamNdefCommand extends AbstractBasicNfcMessage {
+public class StreamNdefCommand extends AbstractPollingCommand {
     public static final byte COMMAND_CODE = (byte)0x03;
-    protected byte mDuration;
 
     public StreamNdefCommand() {
-        mDuration = (byte) 0x00;
+        super();
     }
 
-    public static StreamNdefCommand fromPayload (byte[] payload) {
-        if(payload.length > 0)
-            return new StreamNdefCommand(payload[0]);
-        else
-            return new StreamNdefCommand((byte) 0x00);
-    }
-
-    public StreamNdefCommand(byte duration) {
-        mDuration = duration;
-    }
-
-    public void setDuration(byte duration) {
-        mDuration = duration;
-    }
-
-    public byte getDuration() {
-        return mDuration;
-    }
-
-    @Override
-    public byte[] getPayload() {
-        return new byte[]{mDuration};
+    public StreamNdefCommand(byte timeout, byte pollingMode) {
+        super(timeout, pollingMode);
     }
 
     @Override

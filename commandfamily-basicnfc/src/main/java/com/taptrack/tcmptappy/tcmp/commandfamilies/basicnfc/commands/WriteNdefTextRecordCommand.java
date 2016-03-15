@@ -50,18 +50,17 @@ public class WriteNdefTextRecordCommand extends AbstractBasicNfcMessage {
         this.text = text;
     }
 
-    public static WriteNdefTextRecordCommand fromPayload(byte[] payload) throws MalformedPayloadException{
+    @Override
+    public void parsePayload(byte[] payload) throws MalformedPayloadException {
         if(payload.length >= 2) {
-            byte duration = payload[0];
-            byte lockflag = payload[1];
-            byte[] textBytes;
+            duration = payload[0];
+            lockflag = payload[1];
             if(payload.length > 2) {
-                textBytes = Arrays.copyOfRange(payload, 2, payload.length);
+                text = Arrays.copyOfRange(payload, 2, payload.length);
             }
             else {
-                textBytes = new byte[0];
+                text = new byte[0];
             }
-            return new WriteNdefTextRecordCommand(duration,lockflag,textBytes);
         }
         else {
             throw new MalformedPayloadException("Invalid raw message");

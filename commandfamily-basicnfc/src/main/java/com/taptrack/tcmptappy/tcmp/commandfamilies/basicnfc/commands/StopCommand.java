@@ -16,15 +16,24 @@
 
 package com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands;
 
+import com.taptrack.tcmptappy.tcmp.MalformedPayloadException;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.AbstractBasicNfcMessage;
 
+/**
+ * Tell the Tappy to cancel the operation it's currently performing
+ *
+ * While any command will generally cause the library to stop whatever it
+ * is doing, this command will perform no operation other than cancelling
+ * the previous one
+ */
 public class StopCommand extends AbstractBasicNfcMessage {
     public static final byte COMMAND_CODE = (byte)0x00;
 
     public StopCommand() {}
 
-    public static StopCommand fromPayload(byte[] payload) {
-        return new StopCommand();
+    @Override
+    public void parsePayload(byte[] payload) throws MalformedPayloadException {
+
     }
 
     @Override

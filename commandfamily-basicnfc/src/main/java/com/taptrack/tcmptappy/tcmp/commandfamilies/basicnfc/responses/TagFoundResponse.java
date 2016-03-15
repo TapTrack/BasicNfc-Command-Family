@@ -35,6 +35,14 @@ public class TagFoundResponse extends AbstractBasicNfcMessage {
         mTagType = TagTypes.TAG_UNKNOWN;
     }
 
+    @Override
+    public void parsePayload(byte[] payload) throws MalformedPayloadException {
+        if(payload.length < 5) //at least a 4 byte uid
+            throw new MalformedPayloadException();
+        mTagType  = payload[0];
+        mTagCode = Arrays.copyOfRange(payload, 1, payload.length);
+    }
+
     public TagFoundResponse(byte[] tagCode, byte tagType) {
         mTagCode = tagCode;
         mTagType = tagType;
@@ -46,15 +54,6 @@ public class TagFoundResponse extends AbstractBasicNfcMessage {
 
     public byte getTagType() {
         return mTagType;
-    }
-
-    public static TagFoundResponse fromPayload(byte[] payload) throws MalformedPayloadException {
-        if(payload.length < 5) //at least a 4 byte uid
-            throw new MalformedPayloadException();
-        byte mTagType  = payload[0];
-        byte[] mTagCode = Arrays.copyOfRange(payload, 1, payload.length);
-
-        return new TagFoundResponse(mTagCode,mTagType);
     }
 
     @Override

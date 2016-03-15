@@ -28,6 +28,16 @@ public class BasicNfcLibraryVersionResponse extends AbstractBasicNfcMessage {
         mMajorVersion = 0x00;
         mMinorVersion = 0x00;
     }
+
+    @Override
+    public void parsePayload(byte[] payload) throws MalformedPayloadException {
+        if(payload.length != 2)
+            throw new MalformedPayloadException();
+
+        mMajorVersion = payload[0];
+        mMinorVersion = payload[1];
+    }
+
     public BasicNfcLibraryVersionResponse(byte majorVersion, byte minorVersion) {
         mMajorVersion = majorVersion;
         mMinorVersion = minorVersion;
@@ -39,15 +49,6 @@ public class BasicNfcLibraryVersionResponse extends AbstractBasicNfcMessage {
 
     public byte getMinorVersion () {
         return mMinorVersion;
-    }
-
-    public static BasicNfcLibraryVersionResponse fromPayload(byte[] payload) throws MalformedPayloadException {
-        if(payload.length != 2)
-            throw new MalformedPayloadException();
-
-        byte majorVersion = payload[0];
-        byte minorVersion = payload[1];
-        return new BasicNfcLibraryVersionResponse(majorVersion,minorVersion);
     }
 
     @Override

@@ -25,8 +25,9 @@ public class ScanTimeoutResponse extends AbstractBasicNfcMessage {
     public ScanTimeoutResponse() {
     }
 
-    public static ScanTimeoutResponse fromPayload(byte[] payload) throws MalformedPayloadException {
-        return new ScanTimeoutResponse();
+    @Override
+    public void parsePayload(byte[] payload) throws MalformedPayloadException {
+
     }
 
     @Override

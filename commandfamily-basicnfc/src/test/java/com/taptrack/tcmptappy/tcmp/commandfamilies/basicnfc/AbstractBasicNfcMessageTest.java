@@ -1,5 +1,6 @@
 package com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc;
 
+import com.taptrack.tcmptappy.tcmp.MalformedPayloadException;
 import com.taptrack.tcmptappy.tcmp.TCMPMessage;
 
 import org.junit.Test;
@@ -11,6 +12,11 @@ public class AbstractBasicNfcMessageTest {
     @Test
     public void testGetCommandFamily() throws Exception {
         TCMPMessage message = new AbstractBasicNfcMessage() {
+            @Override
+            public void parsePayload(byte[] payload) throws MalformedPayloadException {
+
+            }
+
             @Override
             public byte[] getPayload() {
                 return new byte[0];

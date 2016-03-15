@@ -33,36 +33,29 @@ import java.util.Arrays;
  */
 public class NdefFoundResponse extends AbstractBasicNfcMessage {
     public static final byte COMMAND_CODE = 0x02;
-    byte[] mTagCode;
-    byte mTagType;
-    NdefMessage mMessage;
+    byte[] tagCode;
+    byte tagType;
+    NdefMessage message;
 
     public NdefFoundResponse() {
-        mTagCode = new byte[7];
-        mMessage = new NdefMessage(new NdefRecord(NdefRecord.TNF_EMPTY,null,null,null));
-        mTagType = TagTypes.TAG_UNKNOWN;
+        tagCode = new byte[7];
+        message = new NdefMessage(new NdefRecord(NdefRecord.TNF_EMPTY,null,null,null));
+        tagType = TagTypes.TAG_UNKNOWN;
     }
 
-    public NdefFoundResponse(byte[] mTagCode, byte mTagType, NdefMessage mMessage) {
-        this.mTagCode = mTagCode;
-        this.mTagType = mTagType;
-        this.mMessage = mMessage;
-    }
-
-    public static NdefFoundResponse fromPayload(byte[] payload) throws MalformedPayloadException {
-
+    @Override
+    public void parsePayload(byte[] payload) throws MalformedPayloadException {
         if(payload.length < 2) throw new MalformedPayloadException("No control bytes");
 
-        byte mTagType = payload[0];
+        tagType = payload[0];
         byte tagCodeLength = (byte) (payload[1] & 0xff);
-        byte[] mTagCode = Arrays.copyOfRange(payload, 2, tagCodeLength + 2);
+        tagCode = Arrays.copyOfRange(payload, 2, tagCodeLength + 2);
         byte[] ndefMessage = new byte[payload.length - (tagCodeLength + 2)];
 
         //make sure ndef payload is not zero-length
         if(payload.length > ((tagCodeLength & 0xff)+2)) {
             System.arraycopy(payload,tagCodeLength+2,ndefMessage,0,(payload.length - tagCodeLength - 2));
         }
-        NdefMessage message;
         if(ndefMessage.length != 0) {
             try {
                 message = new NdefMessage(ndefMessage);
@@ -74,30 +67,46 @@ public class NdefFoundResponse extends AbstractBasicNfcMessage {
         else {
             message = new NdefMessage(new NdefRecord(NdefRecord.TNF_EMPTY,null,null,null));
         }
+    }
 
-        return new NdefFoundResponse(mTagCode,mTagType,message);
+    public NdefFoundResponse(byte[] tagCode, byte tagType, NdefMessage message) {
+        this.tagCode = tagCode;
+        this.tagType = tagType;
+        this.message = message;
     }
 
     public byte[] getTagCode() {
-        return mTagCode;
+        return tagCode;
     }
 
-    public NdefMessage getNdefMessage() {
-        return mMessage;
+    public void setTagCode(byte[] tagCode) {
+        this.tagCode = tagCode;
     }
 
     public byte getTagType() {
-        return mTagType;
+        return tagType;
+    }
+
+    public void setTagType(byte tagType) {
+        this.tagType = tagType;
+    }
+
+    public NdefMessage getMessage() {
+        return message;
+    }
+
+    public void setMessage(NdefMessage message) {
+        this.message = message;
     }
 
     @Override
     public byte[] getPayload() {
-        byte[] messageBytes = mMessage.toByteArray();
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream(2+mTagCode.length+messageBytes.length);
-        outputStream.write(mTagType);
-        outputStream.write(mTagCode.length);
+        byte[] messageBytes = message.toByteArray();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream(2+ tagCode.length+messageBytes.length);
+        outputStream.write(tagType);
+        outputStream.write(tagCode.length);
         try {
-            outputStream.write(mTagCode);
+            outputStream.write(tagCode);
             outputStream.write(messageBytes);
         } catch (IOException e) {
             e.printStackTrace();

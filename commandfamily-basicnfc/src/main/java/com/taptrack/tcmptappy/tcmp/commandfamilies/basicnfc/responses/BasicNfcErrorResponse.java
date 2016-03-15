@@ -39,33 +39,31 @@ public class BasicNfcErrorResponse extends AbstractBasicNfcMessage {
         pn532Status = 0x00;
     }
 
+    @Override
+    public void parsePayload(byte[] payload) throws MalformedPayloadException {
+        if(payload.length >= 3) {
+            errorCode = (byte) (payload[0] & 0xff);
+            internalError = (byte) (payload[1] & 0xff);
+            pn532Status = (byte) (payload[2] & 0xff);
+            if(payload.length > 3) {
+                byte[] message = Arrays.copyOfRange(payload, 3, payload.length);
+                errorMessage = new String(message);
+            }
+            else {
+                errorMessage = "";
+            }
+
+        }
+        else {
+            throw new MalformedPayloadException("Payload too short");
+        }
+    }
+
     public BasicNfcErrorResponse(byte errorCode, byte internalError, byte pn532Status, String errorMessage) {
         this.errorCode = errorCode;
         this.internalError = internalError;
         this.pn532Status = pn532Status;
         this.errorMessage = errorMessage;
-    }
-
-    public static BasicNfcErrorResponse fromPayload(byte[] payload) throws MalformedPayloadException {
-        if(payload.length >= 3) {
-            byte errorCode = (byte) (payload[0] & 0xff);
-            byte internalError = (byte) (payload[1] & 0xff);
-            byte pn532Status = (byte) (payload[2] & 0xff);
-            String messageString;
-            if(payload.length > 3) {
-                byte[] message = Arrays.copyOfRange(payload, 3, payload.length);
-                messageString = new String(message);
-            }
-            else {
-                messageString = "";
-            }
-
-            return new BasicNfcErrorResponse(errorCode,internalError,pn532Status,messageString);
-        }
-        else {
-            throw new MalformedPayloadException("Payload too short");
-        }
-
     }
 
     public byte getErrorCode() {

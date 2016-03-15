@@ -16,73 +16,21 @@
 
 package com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands;
 
-import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.AbstractBasicNfcMessage;
-
 /**
  * Inform the Tappy to scan for tags. If the Tappy detects a tag, it will
  * stop scanning.
  *
- * A timeout of zero corresponds to indefinite.
+ * A timeout of zero corresponds to indefinite scanning.
  */
-public class ScanTagCommand extends AbstractBasicNfcMessage {
+public class ScanTagCommand extends AbstractPollingCommand {
     public static final byte COMMAND_CODE = (byte)0x02;
-    protected byte mTimeout;
-    protected byte mType;
 
     public ScanTagCommand() {
-        mType = (byte) 0x02;
-        mTimeout = (byte) 0x00;
+        super();
     }
 
-    public static ScanTagCommand fromPayload(byte[] payload) {
-        byte timeout;
-        byte type;
-        if(payload.length >= 2) {
-            timeout = payload[0];
-            type = payload[1];
-        }
-        else if (payload.length > 0) {
-            type = (byte) 0x02;
-            timeout = payload[0];
-        }
-        else {
-            type = (byte) 0x02;
-            timeout = (byte) 0x00;
-        }
-
-        return new ScanTagCommand(timeout,type);
-    }
-
-    public ScanTagCommand(byte timeout) {
-        mTimeout = timeout;
-        mType = (byte) 0x02;
-    }
-
-
-    public ScanTagCommand(byte timeout, byte type) {
-        mTimeout = timeout;
-        mType = type;
-    }
-
-    public void setTimeout(byte timeout) {
-        mTimeout = timeout;
-    }
-
-    public byte getTimeout() {
-        return mTimeout;
-    }
-
-    public byte getType() {
-        return mType;
-    }
-
-    public void setType(byte type) {
-        mType = type;
-    }
-
-    @Override
-    public byte[] getPayload() {
-        return new byte[]{mTimeout,mType};
+    public ScanTagCommand(byte timeout, byte pollingMode) {
+        super(timeout, pollingMode);
     }
 
     @Override
