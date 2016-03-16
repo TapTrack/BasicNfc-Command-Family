@@ -13,37 +13,40 @@ import java.util.Arrays;
  */
 public class WriteNdefUriRecordCommand extends AbstractBasicNfcMessage {
     public static final byte COMMAND_CODE = (byte)0x05;
-    protected byte duration;
+    protected byte timeout;
     protected byte lockflag; //1 to lock the flag
     protected byte uriCode;
     protected byte[] uri;
 
     public WriteNdefUriRecordCommand() {
-        duration = (byte) 0x00;
+        timeout = (byte) 0x00;
         lockflag = (byte) 0x00;
         uriCode = NdefUriCodes.URICODE_NOPREFIX;
         uri = new byte[0];
     }
 
 
-    public WriteNdefUriRecordCommand(byte duration, boolean lockTag, byte uriCode, byte[] uri) {
-        this.duration = duration;
+    public WriteNdefUriRecordCommand(byte timeout, boolean lockTag, byte uriCode, byte[] uri) {
+        this.timeout = timeout;
         this.lockflag = (byte) (lockTag ? 0x01: 0x00);
         this.uri = uri;
         this.uriCode = uriCode;
     }
 
-    public WriteNdefUriRecordCommand(byte duration, byte lockflag, byte uriCode, byte[] uri) {
-        this.duration = duration;
+    public WriteNdefUriRecordCommand(byte timeout, byte lockflag, byte uriCode, byte[] uri) {
+        this.timeout = timeout;
         this.lockflag = lockflag;
         this.uriCode = uriCode;
         this.uri = uri;
     }
 
+    public WriteNdefUriRecordCommand(byte timeout, boolean lockflag, byte uriCode, String uri) {
+        this(timeout,lockflag,uriCode,uri.getBytes());
+    }
     @Override
     public void parsePayload(byte[] payload) throws MalformedPayloadException {
         if(payload.length >= 3) {
-            duration = payload[0];
+            timeout = payload[0];
             lockflag = payload[1];
             uriCode = payload[2];
             if(payload.length > 3) {
@@ -58,12 +61,20 @@ public class WriteNdefUriRecordCommand extends AbstractBasicNfcMessage {
         }
     }
 
-    public void setDuration(byte duration) {
-        this.duration = duration;
+    public void setTimeout(byte timeout) {
+        this.timeout = timeout;
     }
 
-    public byte getDuration() {
-        return duration;
+    public byte getTimeout() {
+        return timeout;
+    }
+
+    public byte getLockflag() {
+        return lockflag;
+    }
+
+    public void setLockflag(byte lockflag) {
+        this.lockflag = lockflag;
     }
 
     public boolean willLock() {
@@ -74,12 +85,20 @@ public class WriteNdefUriRecordCommand extends AbstractBasicNfcMessage {
         this.lockflag = (byte) (lockTag ? 0x01:0x00);
     }
 
-    public byte[] getUri() {
+    public byte[] getUriBytes() {
         return uri;
+    }
+
+    public String getUri() {
+        return new String(uri);
     }
 
     public void setUri(byte[] uri) {
         this.uri = uri;
+    }
+
+    public void setUri(String uri) {
+        this.uri = uri.getBytes();
     }
 
     public byte getUriCode() {
@@ -93,7 +112,7 @@ public class WriteNdefUriRecordCommand extends AbstractBasicNfcMessage {
     @Override
     public byte[] getPayload() {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream(3+uri.length);
-        outputStream.write(duration);
+        outputStream.write(timeout);
         outputStream.write(lockflag);
         outputStream.write(uriCode);
         try {

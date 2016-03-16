@@ -23,7 +23,7 @@ import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands.ScanTagComm
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands.StopCommand;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands.StreamNdefCommand;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands.StreamTagsCommand;
-import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands.WriteNdefCustomRecordCommand;
+import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands.WriteNdefCustomMessageCommand;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands.WriteNdefTextRecordCommand;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands.WriteNdefUriRecordCommand;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.responses.BasicNfcLibraryVersionResponse;
@@ -68,8 +68,8 @@ public class BasicNfcCommandLibrary implements CommandFamily {
                 parsedMessage = new StreamTagsCommand();
                 break;
 
-            case WriteNdefCustomRecordCommand.COMMAND_CODE:
-                parsedMessage = new WriteNdefCustomRecordCommand();
+            case WriteNdefCustomMessageCommand.COMMAND_CODE:
+                parsedMessage = new WriteNdefCustomMessageCommand();
                 break;
 
             case WriteNdefTextRecordCommand.COMMAND_CODE:

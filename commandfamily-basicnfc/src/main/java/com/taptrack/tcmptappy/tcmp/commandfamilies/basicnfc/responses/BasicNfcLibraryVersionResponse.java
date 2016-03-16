@@ -16,44 +16,51 @@
 
 package com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.responses;
 
+import com.taptrack.tcmptappy.tcmp.StandardLibraryVersionResponse;
+import com.taptrack.tcmptappy.tcmp.StandardLibraryVersionResponseDelegate;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.AbstractBasicNfcMessage;
 import com.taptrack.tcmptappy.tcmp.MalformedPayloadException;
 
-public class BasicNfcLibraryVersionResponse extends AbstractBasicNfcMessage {
+public class BasicNfcLibraryVersionResponse extends AbstractBasicNfcMessage implements StandardLibraryVersionResponse {
     public static final byte COMMAND_CODE = 0x04;
-    byte mMajorVersion;
-    byte mMinorVersion;
+    private StandardLibraryVersionResponseDelegate delegate;
 
     public BasicNfcLibraryVersionResponse() {
-        mMajorVersion = 0x00;
-        mMinorVersion = 0x00;
+        delegate = new StandardLibraryVersionResponseDelegate();
+    }
+
+    public BasicNfcLibraryVersionResponse(byte majorVersion, byte minorVersion) {
+        delegate = new StandardLibraryVersionResponseDelegate(majorVersion,minorVersion);
+    }
+
+    @Override
+    public byte getMajorVersion() {
+        return delegate.getMajorVersion();
+    }
+
+    @Override
+    public void setMajorVersion(byte majorVersion) {
+        delegate.setMajorVersion(majorVersion);
+    }
+
+    @Override
+    public byte getMinorVersion() {
+        return delegate.getMinorVersion();
+    }
+
+    @Override
+    public void setMinorVersion(byte minorVersion) {
+        delegate.setMinorVersion(minorVersion);
     }
 
     @Override
     public void parsePayload(byte[] payload) throws MalformedPayloadException {
-        if(payload.length != 2)
-            throw new MalformedPayloadException();
-
-        mMajorVersion = payload[0];
-        mMinorVersion = payload[1];
-    }
-
-    public BasicNfcLibraryVersionResponse(byte majorVersion, byte minorVersion) {
-        mMajorVersion = majorVersion;
-        mMinorVersion = minorVersion;
-    }
-
-    public byte getMajorVersion () {
-        return mMajorVersion;
-    }
-
-    public byte getMinorVersion () {
-        return mMinorVersion;
+        delegate.parsePayload(payload);
     }
 
     @Override
     public byte[] getPayload() {
-        return new byte[]{mMajorVersion,mMinorVersion};
+        return delegate.getPayload();
     }
 
     @Override

@@ -19,17 +19,15 @@ public class TagWrittenResponse extends AbstractBasicNfcMessage {
         tagType = TagTypes.TAG_UNKNOWN;
     }
 
-    @Override
-    public void parsePayload(byte[] payload) throws MalformedPayloadException {
-        if(payload.length < 5) //at least a 4 byte uid
-            throw new MalformedPayloadException();
-        tagType = payload[0];
-        tagCode = Arrays.copyOfRange(payload, 1, payload.length);
-    }
-
     public TagWrittenResponse(byte[] tagCode, byte tagType) {
         this.tagCode = tagCode;
         this.tagType = tagType;
+    }
+
+    @Override
+    public void parsePayload(byte[] payload) throws MalformedPayloadException {
+        tagType = payload[0];
+        tagCode = Arrays.copyOfRange(payload, 1, payload.length);
     }
 
     public byte[] getTagCode() {

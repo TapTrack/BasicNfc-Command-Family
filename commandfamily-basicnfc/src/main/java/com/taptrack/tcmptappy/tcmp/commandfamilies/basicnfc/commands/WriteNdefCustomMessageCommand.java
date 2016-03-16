@@ -26,27 +26,27 @@ import java.util.Arrays;
 /**
  * Command the Tappy to write an arbitrary custom NDEF record to tags
  */
-public class WriteNdefCustomRecordCommand extends AbstractBasicNfcMessage {
+public class WriteNdefCustomMessageCommand extends AbstractBasicNfcMessage {
 
     public static final byte COMMAND_CODE = (byte)0x07;
     protected byte timeout;
     protected byte lockflag; //1 to lock the flag
     protected byte[] content;
 
-    public WriteNdefCustomRecordCommand() {
+    public WriteNdefCustomMessageCommand() {
         timeout = (byte) 0x00;
         lockflag = (byte) 0x00;
         content = new byte[0];
     }
 
 
-    public WriteNdefCustomRecordCommand(byte timeout, boolean lockTag, byte[] content) {
+    public WriteNdefCustomMessageCommand(byte timeout, boolean lockTag, byte[] content) {
         this.timeout = timeout;
         this.lockflag = (byte) (lockTag ? 0x01: 0x00);
         this.content = content;
     }
 
-    public WriteNdefCustomRecordCommand(byte timeout, byte lockTag, byte[] content) {
+    public WriteNdefCustomMessageCommand(byte timeout, byte lockTag, byte[] content) {
         this.timeout = timeout;
         this.lockflag = lockTag;
         this.content = content;

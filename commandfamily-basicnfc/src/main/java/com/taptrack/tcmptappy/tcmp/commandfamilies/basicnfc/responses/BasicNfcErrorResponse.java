@@ -16,106 +16,79 @@
 
 package com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.responses;
 
-import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.AbstractBasicNfcMessage;
 import com.taptrack.tcmptappy.tcmp.MalformedPayloadException;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.Arrays;
+import com.taptrack.tcmptappy.tcmp.StandardErrorResponse;
+import com.taptrack.tcmptappy.tcmp.StandardErrorResponseDelegate;
+import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.AbstractBasicNfcMessage;
 
 /**
  * Basic error response for NFC library errors
  */
-public class BasicNfcErrorResponse extends AbstractBasicNfcMessage {
+public class BasicNfcErrorResponse extends AbstractBasicNfcMessage implements StandardErrorResponse {
     public static final byte COMMAND_CODE = 0x7F;
-    byte errorCode;
-    byte internalError;
-    byte pn532Status;
-    String errorMessage;
+    private StandardErrorResponseDelegate delegate;
 
     public BasicNfcErrorResponse() {
-        errorCode = 0x00;
-        internalError= 0x00;
-        pn532Status = 0x00;
+        delegate = new StandardErrorResponseDelegate();
+    }
+
+    public BasicNfcErrorResponse(byte errorCode, byte internalError, byte readerStatus, String errorMessage) {
+        delegate = new StandardErrorResponseDelegate(errorCode,internalError,readerStatus,errorMessage);
+    }
+
+    @Override
+    public byte getErrorCode() {
+        return delegate.getErrorCode();
+    }
+
+    @Override
+    public void setErrorCode(byte errorCode) {
+        delegate.setErrorCode(errorCode);
+    }
+
+    @Override
+    public byte getInternalErrorCode() {
+        return delegate.getInternalErrorCode();
+    }
+
+    @Override
+    public void setInternalErrorCode(byte internalErrorCode) {
+        delegate.setInternalErrorCode(internalErrorCode);
+    }
+
+    @Override
+    public byte getReaderStatus() {
+        return delegate.getReaderStatus();
+    }
+
+    @Override
+    public void setReaderStatus(byte readerStatus) {
+        delegate.setReaderStatus(readerStatus);
+    }
+
+    @Override
+    public String getErrorMessage() {
+        return delegate.getErrorMessage();
+    }
+
+    @Override
+    public void setErrorMessage(String errorMessage) {
+        delegate.setErrorMessage(errorMessage);
+    }
+
+    @Override
+    public void setErrorMessage(byte[] errorMessage) {
+        delegate.setErrorMessage(errorMessage);
     }
 
     @Override
     public void parsePayload(byte[] payload) throws MalformedPayloadException {
-        if(payload.length >= 3) {
-            errorCode = (byte) (payload[0] & 0xff);
-            internalError = (byte) (payload[1] & 0xff);
-            pn532Status = (byte) (payload[2] & 0xff);
-            if(payload.length > 3) {
-                byte[] message = Arrays.copyOfRange(payload, 3, payload.length);
-                errorMessage = new String(message);
-            }
-            else {
-                errorMessage = "";
-            }
-
-        }
-        else {
-            throw new MalformedPayloadException("Payload too short");
-        }
-    }
-
-    public BasicNfcErrorResponse(byte errorCode, byte internalError, byte pn532Status, String errorMessage) {
-        this.errorCode = errorCode;
-        this.internalError = internalError;
-        this.pn532Status = pn532Status;
-        this.errorMessage = errorMessage;
-    }
-
-    public byte getErrorCode() {
-        return errorCode;
-    }
-
-    public void setErrorCode(byte errorCode) {
-        this.errorCode = errorCode;
-    }
-
-    public byte getInternalError() {
-        return internalError;
-    }
-
-    public void setInternalError(byte internalError) {
-        this.internalError = internalError;
-    }
-
-    public byte getPn532Status() {
-        return pn532Status;
-    }
-
-    public void setPn532Status(byte pn532Status) {
-        this.pn532Status = pn532Status;
-    }
-
-    public String getErrorMessage() {
-        return errorMessage;
-    }
-
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
+        delegate.parsePayload(payload);
     }
 
     @Override
     public byte[] getPayload() {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream(3+errorMessage.length());
-        outputStream.write(errorCode);
-        outputStream.write(internalError);
-        outputStream.write(pn532Status);
-        try {
-            outputStream.write(errorMessage.getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        byte[] payload = outputStream.toByteArray();
-        try {
-            outputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return payload;
+        return delegate.getPayload();
     }
 
     @Override

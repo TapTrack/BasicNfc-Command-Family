@@ -28,32 +28,36 @@ import java.util.Arrays;
 public class WriteNdefTextRecordCommand extends AbstractBasicNfcMessage {
 
     public static final byte COMMAND_CODE = (byte)0x06;
-    protected byte duration;
+    protected byte timeout;
     protected byte lockflag; //1 to lock the flag
     protected byte[] text;
 
     public WriteNdefTextRecordCommand() {
-        duration = (byte) 0x00;
+        timeout = (byte) 0x00;
         lockflag = (byte) 0x00;
         text = new byte[0];
     }
 
-    public WriteNdefTextRecordCommand(byte duration, boolean lockTag, byte[] text) {
-        this.duration = duration;
+    public WriteNdefTextRecordCommand(byte timeout, boolean lockTag, byte[] text) {
+        this.timeout = timeout;
         this.lockflag = (byte) (lockTag ? 0x01: 0x00);
         this.text = text;
     }
 
-    public WriteNdefTextRecordCommand(byte duration, byte lockTag, byte[] text) {
-        this.duration = duration;
+    public WriteNdefTextRecordCommand(byte timeout, byte lockTag, byte[] text) {
+        this.timeout = timeout;
         this.lockflag = lockTag;
         this.text = text;
+    }
+
+    public WriteNdefTextRecordCommand(byte timeout, byte lockTag, String text) {
+        this(timeout,lockTag,text.getBytes());
     }
 
     @Override
     public void parsePayload(byte[] payload) throws MalformedPayloadException {
         if(payload.length >= 2) {
-            duration = payload[0];
+            timeout = payload[0];
             lockflag = payload[1];
             if(payload.length > 2) {
                 text = Arrays.copyOfRange(payload, 2, payload.length);
@@ -67,12 +71,20 @@ public class WriteNdefTextRecordCommand extends AbstractBasicNfcMessage {
         }
     }
 
-    public void setDuration(byte duration) {
-        this.duration = duration;
+    public void setTimeout(byte timeout) {
+        this.timeout = timeout;
     }
 
-    public byte getDuration() {
-        return duration;
+    public byte getTimeout() {
+        return timeout;
+    }
+
+    public byte getLockflag() {
+        return lockflag;
+    }
+
+    public void setLockflag(byte lockflag) {
+        this.lockflag = lockflag;
     }
 
     public boolean willLock() {
@@ -83,8 +95,12 @@ public class WriteNdefTextRecordCommand extends AbstractBasicNfcMessage {
         this.lockflag = (byte) (lockTag ? 0x01:0x00);
     }
 
-    public byte[] getText() {
+    public byte[] getTextBytes() {
         return text;
+    }
+
+    public String getText() {
+        return new String(text);
     }
 
     public void setText(byte[] text) {
@@ -104,7 +120,7 @@ public class WriteNdefTextRecordCommand extends AbstractBasicNfcMessage {
     @Override
     public byte[] getPayload() {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream(3+ text.length);
-        outputStream.write(duration);
+        outputStream.write(timeout);
         outputStream.write(lockflag);
         try {
             outputStream.write(text);

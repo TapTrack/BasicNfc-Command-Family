@@ -9,7 +9,7 @@ import java.util.Random;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
-public class WriteNdefCustomRecordCommandTest {
+public class WriteNdefCustomMessageCommandTest {
     Random random = new Random();
 
     private byte[] generatePayload(byte timeout, byte lockFlag, byte[] content) {
@@ -32,7 +32,7 @@ public class WriteNdefCustomRecordCommandTest {
         random.nextBytes(content);
         byte[] payload = generatePayload(timeout,lockflag,content);
 
-        WriteNdefCustomRecordCommand command = new WriteNdefCustomRecordCommand();
+        WriteNdefCustomMessageCommand command = new WriteNdefCustomMessageCommand();
         command.parsePayload(payload);
         assertEquals(command.getTimeout(), timeout);
         assertEquals(command.getLockflag(), lockflag);
@@ -48,14 +48,14 @@ public class WriteNdefCustomRecordCommandTest {
         random.nextBytes(content);
         byte[] payload = generatePayload(timeout,lockflag,content);
 
-        WriteNdefCustomRecordCommand command =
-                new WriteNdefCustomRecordCommand(timeout,lockflag,content);
+        WriteNdefCustomMessageCommand command =
+                new WriteNdefCustomMessageCommand(timeout,lockflag,content);
         assertArrayEquals(payload,command.getPayload());
     }
 
     @Test
     public void testGetCommandCode() throws Exception {
-        WriteNdefCustomRecordCommand command = new WriteNdefCustomRecordCommand();
+        WriteNdefCustomMessageCommand command = new WriteNdefCustomMessageCommand();
         assertEquals(command.getCommandCode(),0x07);
     }
 }
