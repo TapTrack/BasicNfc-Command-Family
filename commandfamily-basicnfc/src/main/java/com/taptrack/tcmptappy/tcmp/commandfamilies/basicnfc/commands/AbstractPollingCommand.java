@@ -4,6 +4,9 @@ import com.taptrack.tcmptappy.tcmp.MalformedPayloadException;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.AbstractBasicNfcMessage;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.PollingModes;
 
+/**
+ * Base class for the various Basic NFC polling commands
+ */
 public abstract class AbstractPollingCommand extends AbstractBasicNfcMessage {
     byte timeout;
     byte pollingMode;

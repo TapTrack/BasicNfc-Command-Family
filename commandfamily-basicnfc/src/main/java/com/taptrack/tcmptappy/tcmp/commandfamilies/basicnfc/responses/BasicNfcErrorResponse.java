@@ -28,6 +28,42 @@ public class BasicNfcErrorResponse extends AbstractBasicNfcMessage implements St
     public static final byte COMMAND_CODE = 0x7F;
     private StandardErrorResponseDelegate delegate;
 
+    public interface ErrorCodes {
+        /**
+         * A parameter was specific that is not acceptable
+         */
+        public static final byte INVALID_PARAMETER = 0x01;
+        /**
+         * Reserved for future use
+         */
+        public static final byte RFU = 0x02;
+        /**
+         * A fatal error occurred during polling
+         */
+        public static final byte POLLING_ERROR = 0x03;
+        /**
+         * A sufficient number of parameters was not specified
+         */
+        public static final byte TOO_FEW_PARAMETERS = 0x04;
+        /**
+         * Attempting to write an NDEF message that is too large for the tag presented
+         */
+        public static final byte NDEF_MESSAGE_TOO_LARGE = 0x05;
+        /**
+         * An error occurred creating the NDEF content for writing to the tag
+         */
+        public static final byte ERROR_CREATING_NDEF_CONTENT = 0x06;
+        /**
+         * An error occurred while writing NDEF content to the tag
+         */
+        public static final byte ERROR_WRITING_NDEF_CONTENT = 0x07;
+        /**
+         * An error occured locking the tag. It may be locked or partially locked to
+         * an unrecoverable state.
+         */
+        public static final byte ERROR_LOCKING_TAG = 0x08;
+    }
+
     public BasicNfcErrorResponse() {
         delegate = new StandardErrorResponseDelegate();
     }

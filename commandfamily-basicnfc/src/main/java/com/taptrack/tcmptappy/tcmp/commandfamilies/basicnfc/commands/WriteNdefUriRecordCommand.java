@@ -3,6 +3,7 @@ package com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands;
 import com.taptrack.tcmptappy.tappy.constants.NdefUriCodes;
 import com.taptrack.tcmptappy.tcmp.MalformedPayloadException;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.AbstractBasicNfcMessage;
+import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.LockingModes;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -25,7 +26,13 @@ public class WriteNdefUriRecordCommand extends AbstractBasicNfcMessage {
         uri = new byte[0];
     }
 
-
+    /**
+     *
+     * @param timeout
+     * @param lockTag {@link com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.PollingModes}
+     * @param uriCode {@link NdefUriCodes}
+     * @param uri
+     */
     public WriteNdefUriRecordCommand(byte timeout, boolean lockTag, byte uriCode, byte[] uri) {
         this.timeout = timeout;
         this.lockflag = (byte) (lockTag ? 0x01: 0x00);
@@ -33,6 +40,13 @@ public class WriteNdefUriRecordCommand extends AbstractBasicNfcMessage {
         this.uriCode = uriCode;
     }
 
+    /**
+     *
+     * @param timeout
+     * @param lockflag {@link com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.PollingModes}
+     * @param uriCode {@link NdefUriCodes}
+     * @param uri
+     */
     public WriteNdefUriRecordCommand(byte timeout, byte lockflag, byte uriCode, byte[] uri) {
         this.timeout = timeout;
         this.lockflag = lockflag;
@@ -61,28 +75,62 @@ public class WriteNdefUriRecordCommand extends AbstractBasicNfcMessage {
         }
     }
 
-    public void setTimeout(byte timeout) {
-        this.timeout = timeout;
-    }
-
+    /**
+     * Retreive the timeout after which the Tappy will stop scanning and send a
+     * {@link com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.responses.ScanTimeoutResponse}
+     *
+     * 0x00 disables timeout
+     * @return
+     */
     public byte getTimeout() {
         return timeout;
     }
 
+    /**
+     * Set the timeout after which the Tappy will stop scanning and send a
+     * {@link com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.responses.ScanTimeoutResponse}
+     *
+     * 0x00 disables timeout
+     * @param timeout
+     */
+    public void setTimeout(byte timeout) {
+        this.timeout = timeout;
+    }
+
+    /**
+     * Get the flag that determines if the Tappy will attempt to lock the tag after writing
+     *
+     * See: {@link com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.LockingModes}
+     * @return locking flag
+     */
     public byte getLockflag() {
         return lockflag;
     }
 
+    /**
+     * Set the flag that determines if the Tappy will attempt to lock the tag after writing
+     *
+     * See: {@link com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.LockingModes}
+     * @param lockflag locking mode this command should be executed with
+     */
     public void setLockflag(byte lockflag) {
         this.lockflag = lockflag;
     }
 
+    /**
+     * If the current state of the locking tag will lock the tag
+     * @return
+     */
     public boolean willLock() {
-        return lockflag == 0x01;
+        return lockflag == LockingModes.LOCK_TAG;
     }
 
+    /**
+     * Set locking flag to the appropriate value for a locking state
+     * @param lockTag
+     */
     public void setToLock(boolean lockTag) {
-        this.lockflag = (byte) (lockTag ? 0x01:0x00);
+        this.lockflag = (byte) (lockTag ? LockingModes.LOCK_TAG:LockingModes.DONT_LOCK);
     }
 
     public byte[] getUriBytes() {
@@ -101,10 +149,22 @@ public class WriteNdefUriRecordCommand extends AbstractBasicNfcMessage {
         this.uri = uri.getBytes();
     }
 
+    /**
+     * Get the NDEF Uri this command will use
+     *
+     * See: {@link NdefUriCodes}
+     * @return current code
+     */
     public byte getUriCode() {
         return uriCode;
     }
 
+    /**
+     * Set the URI code for this NDEF write
+     *
+     * See: {@link NdefUriCodes}
+     * @param uriCode new uri code
+     */
     public void setUriCode(byte uriCode) {
         this.uriCode = uriCode;
     }

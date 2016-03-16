@@ -16,8 +16,12 @@
 
 package com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands;
 
+import android.nfc.FormatException;
+import android.nfc.NdefMessage;
+
 import com.taptrack.tcmptappy.tcmp.MalformedPayloadException;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.AbstractBasicNfcMessage;
+import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.LockingModes;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -52,6 +56,12 @@ public class WriteNdefCustomMessageCommand extends AbstractBasicNfcMessage {
         this.content = content;
     }
 
+    public WriteNdefCustomMessageCommand(byte timeout, byte lockTag, NdefMessage content) {
+        this.timeout = timeout;
+        this.lockflag = lockTag;
+        this.content =  content.toByteArray();
+    }
+
     @Override
     public void parsePayload(byte[] payload) throws MalformedPayloadException {
         if(payload.length >= 2) {
@@ -69,36 +79,92 @@ public class WriteNdefCustomMessageCommand extends AbstractBasicNfcMessage {
         }
     }
 
+    /**
+     * Retreive the timeout after which the Tappy will stop scanning and send a
+     * {@link com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.responses.ScanTimeoutResponse}
+     *
+     * 0x00 disables timeout
+     * @return
+     */
     public byte getTimeout() {
         return timeout;
     }
 
+    /**
+     * Set the timeout after which the Tappy will stop scanning and send a
+     * {@link com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.responses.ScanTimeoutResponse}
+     *
+     * 0x00 disables timeout
+     * @param timeout
+     */
     public void setTimeout(byte timeout) {
         this.timeout = timeout;
     }
 
+    /**
+     * Get the flag that determines if the Tappy will attempt to lock the tag after writing
+     *
+     * See: {@link com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.LockingModes}
+     * @return locking flag
+     */
     public byte getLockflag() {
         return lockflag;
     }
 
+    /**
+     * Set the flag that determines if the Tappy will attempt to lock the tag after writing
+     *
+     * See: {@link com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.LockingModes}
+     * @param lockflag locking mode this command should be executed with
+     */
     public void setLockflag(byte lockflag) {
         this.lockflag = lockflag;
     }
 
-    public byte[] getContent() {
+    /**
+     * Get the byte array that represents this command's custom content
+     * @return
+     */
+    public byte[] getContentBytes() {
         return content;
+    }
+
+    /**
+     * Get the NdefMessage this will attempt to write
+     * @return Current ndef message or null if no message currently set
+     * @throws FormatException if the current content is not a valid {@link NdefMessage}
+     */
+    public NdefMessage getContent() throws FormatException {
+        if(content == null || content.length == 0) {
+            return null;
+        }
+        else {
+            return new NdefMessage(content);
+        }
+    }
+
+    public void setContent(NdefMessage content) {
+        this.content = content.toByteArray();
     }
 
     public void setContent(byte[] content) {
         this.content = content;
     }
 
+    /**
+     * If the current state of the locking tag will lock the tag
+     * @return
+     */
     public boolean willLock() {
-        return lockflag == 0x01;
+        return lockflag == LockingModes.LOCK_TAG;
     }
 
+    /**
+     * Set locking flag to the appropriate value for a locking state
+     * @param lockTag
+     */
     public void setToLock(boolean lockTag) {
-        this.lockflag = (byte) (lockTag ? 0x01:0x00);
+        this.lockflag = (byte) (lockTag ? LockingModes.LOCK_TAG:LockingModes.DONT_LOCK);
     }
 
     @Override

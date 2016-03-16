@@ -37,7 +37,7 @@ public class WriteNdefCustomMessageCommandTest {
         assertEquals(command.getTimeout(), timeout);
         assertEquals(command.getLockflag(), lockflag);
         assertEquals(command.willLock(),(lockflag == 0x01));
-        assertArrayEquals(command.getContent(),content);
+        assertArrayEquals(command.getContentBytes(),content);
     }
 
     @Test
