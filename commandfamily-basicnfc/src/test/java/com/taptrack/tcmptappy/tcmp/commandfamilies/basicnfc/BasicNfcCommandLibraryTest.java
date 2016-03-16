@@ -109,13 +109,6 @@ public class BasicNfcCommandLibraryTest {
         testResponse(new ScanTimeoutResponse(),ScanTimeoutResponse.class);
         testResponse(new TagFoundResponse(),TagFoundResponse.class);
         testResponse(new TagWrittenResponse(),TagWrittenResponse.class);
-    }
-
-    private void testResponse(TCMPMessage message,Class<? extends TCMPMessage> clazz)
-            throws ResponseCodeNotSupportedException, MalformedPayloadException {
-        TCMPMessage parsedMessage = library.parseResponse(message);
-        assertThat(parsedMessage,instanceOf(clazz));
-        assertArrayEquals(message.getPayload(),parsedMessage.getPayload());
 
         boolean responseCodeNotSupportedThrown = false;
         try {
@@ -126,6 +119,13 @@ public class BasicNfcCommandLibraryTest {
         }
 
         assertTrue(responseCodeNotSupportedThrown);
+    }
+
+    private void testResponse(TCMPMessage message,Class<? extends TCMPMessage> clazz)
+            throws ResponseCodeNotSupportedException, MalformedPayloadException {
+        TCMPMessage parsedMessage = library.parseResponse(message);
+        assertThat(parsedMessage,instanceOf(clazz));
+        assertArrayEquals(message.getPayload(), parsedMessage.getPayload());
     }
 
     @Test
