@@ -32,7 +32,7 @@ ext.globalCfg = [
         minSdkVersion: 18,
         compileSdkVersion: 23,
         buildToolsVersion: "23.0.2",
-        publishedVersion: "0.7.0",
+        publishedVersion: "0.7.1",
         publishedGroupId : 'com.taptrack.tcmptappy',
 ]
 
@@ -52,8 +52,8 @@ ext.bintrayCfg = [
         ],
 
 
-        siteUrl : 'https://github.com/TapTrack/Type4-Command-Family',
-        gitUrl : 'https://github.com/TapTrack/Type4-Command-Family.git',
+        siteUrl : 'https://github.com/TapTrack/BasicNfc-Command-Family',
+        gitUrl : 'https://github.com/TapTrack/BasicNfc-Command-Family.git',
 
         developerId : "TapTrack",
         developerName : "TapTrack",
