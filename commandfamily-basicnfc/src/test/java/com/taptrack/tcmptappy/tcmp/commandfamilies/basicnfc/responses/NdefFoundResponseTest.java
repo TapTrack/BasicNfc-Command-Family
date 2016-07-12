@@ -59,7 +59,7 @@ public class NdefFoundResponseTest {
         byte tagType = TagTypes.MIFARE_DESFIRE;
         byte[] uid = new byte[10];
         random.nextBytes(uid);
-        NdefMessage message = createTextRecord("Test payload",Locale.US,true);
+        NdefMessage message = createTextRecord("Particularly long test payload in order to check for an issue that was uncovered",Locale.US,true);
 
         byte[] payload = generateTestPayload(tagType, uid, message);
         NdefFoundResponse response = new NdefFoundResponse();

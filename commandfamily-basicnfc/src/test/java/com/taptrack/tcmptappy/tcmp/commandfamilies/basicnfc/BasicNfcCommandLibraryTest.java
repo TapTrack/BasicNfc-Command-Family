@@ -3,6 +3,7 @@ package com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc;
 import com.taptrack.tcmptappy.tcmp.MalformedPayloadException;
 import com.taptrack.tcmptappy.tcmp.TCMPMessage;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands.GetBasicNfcLibraryVersionCommand;
+import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands.LockTagCommand;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands.ScanNdefCommand;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands.ScanTagCommand;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands.StopCommand;
@@ -16,6 +17,7 @@ import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.responses.BasicNfcLi
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.responses.NdefFoundResponse;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.responses.ScanTimeoutResponse;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.responses.TagFoundResponse;
+import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.responses.TagLockedResponse;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.responses.TagWrittenResponse;
 import com.taptrack.tcmptappy.tcmp.common.CommandCodeNotSupportedException;
 import com.taptrack.tcmptappy.tcmp.common.ResponseCodeNotSupportedException;
@@ -82,6 +84,7 @@ public class BasicNfcCommandLibraryTest {
         testCommand(new WriteNdefCustomMessageCommand(), WriteNdefCustomMessageCommand.class);
         testCommand(new WriteNdefTextRecordCommand(), WriteNdefTextRecordCommand.class);
         testCommand(new WriteNdefUriRecordCommand(), WriteNdefUriRecordCommand.class);
+        testCommand(new LockTagCommand(), LockTagCommand.class);
 
         boolean commandCodeNotSupportedThrown = false;
         try {
@@ -109,6 +112,7 @@ public class BasicNfcCommandLibraryTest {
         testResponse(new ScanTimeoutResponse(),ScanTimeoutResponse.class);
         testResponse(new TagFoundResponse(),TagFoundResponse.class);
         testResponse(new TagWrittenResponse(),TagWrittenResponse.class);
+        testResponse(new TagLockedResponse(), TagLockedResponse.class);
 
         boolean responseCodeNotSupportedThrown = false;
         try {

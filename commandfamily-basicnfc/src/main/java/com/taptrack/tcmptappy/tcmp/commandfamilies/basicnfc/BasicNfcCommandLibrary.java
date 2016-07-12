@@ -16,8 +16,10 @@
 
 package com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc;
 
+import com.taptrack.tcmptappy.tcmp.MalformedPayloadException;
 import com.taptrack.tcmptappy.tcmp.TCMPMessage;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands.GetBasicNfcLibraryVersionCommand;
+import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands.LockTagCommand;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands.ScanNdefCommand;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands.ScanTagCommand;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands.StopCommand;
@@ -26,13 +28,13 @@ import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands.StreamTagsC
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands.WriteNdefCustomMessageCommand;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands.WriteNdefTextRecordCommand;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands.WriteNdefUriRecordCommand;
+import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.responses.BasicNfcErrorResponse;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.responses.BasicNfcLibraryVersionResponse;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.responses.NdefFoundResponse;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.responses.ScanTimeoutResponse;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.responses.TagFoundResponse;
+import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.responses.TagLockedResponse;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.responses.TagWrittenResponse;
-import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.responses.BasicNfcErrorResponse;
-import com.taptrack.tcmptappy.tcmp.MalformedPayloadException;
 import com.taptrack.tcmptappy.tcmp.common.CommandCodeNotSupportedException;
 import com.taptrack.tcmptappy.tcmp.common.CommandFamily;
 import com.taptrack.tcmptappy.tcmp.common.ResponseCodeNotSupportedException;
@@ -80,6 +82,10 @@ public class BasicNfcCommandLibrary implements CommandFamily {
                 parsedMessage = new WriteNdefUriRecordCommand();
                 break;
 
+            case LockTagCommand.COMMAND_CODE:
+                parsedMessage = new LockTagCommand();
+                break;
+
             default:
                 throw new CommandCodeNotSupportedException(
                         BasicNfcCommandLibrary.class.getSimpleName() +
@@ -115,6 +121,10 @@ public class BasicNfcCommandLibrary implements CommandFamily {
 
             case TagWrittenResponse.COMMAND_CODE:
                 parsedMessage = new TagWrittenResponse();
+                break;
+
+            case TagLockedResponse.COMMAND_CODE:
+                parsedMessage = new TagLockedResponse();
                 break;
 
             default:
