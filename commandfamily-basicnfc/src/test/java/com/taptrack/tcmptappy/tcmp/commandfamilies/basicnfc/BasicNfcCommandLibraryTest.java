@@ -2,6 +2,7 @@ package com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc;
 
 import com.taptrack.tcmptappy.tcmp.MalformedPayloadException;
 import com.taptrack.tcmptappy.tcmp.TCMPMessage;
+import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands.DispatchTagsCommand;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands.GetBasicNfcLibraryVersionCommand;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands.LockTagCommand;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands.ScanNdefCommand;
@@ -24,7 +25,7 @@ import com.taptrack.tcmptappy.tcmp.common.ResponseCodeNotSupportedException;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.RobolectricGradleTestRunner;
+import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -32,7 +33,7 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-@RunWith(RobolectricGradleTestRunner.class)
+@RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class)
 public class BasicNfcCommandLibraryTest {
     BasicNfcCommandLibrary library = new BasicNfcCommandLibrary();
@@ -85,6 +86,7 @@ public class BasicNfcCommandLibraryTest {
         testCommand(new WriteNdefTextRecordCommand(), WriteNdefTextRecordCommand.class);
         testCommand(new WriteNdefUriRecordCommand(), WriteNdefUriRecordCommand.class);
         testCommand(new LockTagCommand(), LockTagCommand.class);
+        testCommand(new DispatchTagsCommand(), DispatchTagsCommand.class);
 
         boolean commandCodeNotSupportedThrown = false;
         try {

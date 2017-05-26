@@ -18,6 +18,7 @@ package com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc;
 
 import com.taptrack.tcmptappy.tcmp.MalformedPayloadException;
 import com.taptrack.tcmptappy.tcmp.TCMPMessage;
+import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands.DispatchTagsCommand;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands.GetBasicNfcLibraryVersionCommand;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands.LockTagCommand;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.commands.ScanNdefCommand;
@@ -84,6 +85,10 @@ public class BasicNfcCommandLibrary implements CommandFamily {
 
             case LockTagCommand.COMMAND_CODE:
                 parsedMessage = new LockTagCommand();
+                break;
+
+            case DispatchTagsCommand.COMMAND_CODE:
+                parsedMessage = new DispatchTagsCommand();
                 break;
 
             default:
