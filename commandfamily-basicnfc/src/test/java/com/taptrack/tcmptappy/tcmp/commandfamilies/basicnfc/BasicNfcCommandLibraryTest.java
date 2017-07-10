@@ -17,6 +17,7 @@ import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.responses.BasicNfcEr
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.responses.BasicNfcLibraryVersionResponse;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.responses.NdefFoundResponse;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.responses.ScanTimeoutResponse;
+import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.responses.SignedTagFoundResponse;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.responses.TagFoundResponse;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.responses.TagLockedResponse;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.responses.TagWrittenResponse;
@@ -113,6 +114,7 @@ public class BasicNfcCommandLibraryTest {
         testResponse(new NdefFoundResponse(),NdefFoundResponse.class);
         testResponse(new ScanTimeoutResponse(),ScanTimeoutResponse.class);
         testResponse(new TagFoundResponse(),TagFoundResponse.class);
+        testResponse(new SignedTagFoundResponse(), SignedTagFoundResponse.class);
         testResponse(new TagWrittenResponse(),TagWrittenResponse.class);
         testResponse(new TagLockedResponse(), TagLockedResponse.class);
 

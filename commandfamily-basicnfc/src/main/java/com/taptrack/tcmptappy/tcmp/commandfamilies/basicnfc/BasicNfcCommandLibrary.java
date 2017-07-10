@@ -33,6 +33,7 @@ import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.responses.BasicNfcEr
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.responses.BasicNfcLibraryVersionResponse;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.responses.NdefFoundResponse;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.responses.ScanTimeoutResponse;
+import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.responses.SignedTagFoundResponse;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.responses.TagFoundResponse;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.responses.TagLockedResponse;
 import com.taptrack.tcmptappy.tcmp.commandfamilies.basicnfc.responses.TagWrittenResponse;
@@ -122,6 +123,10 @@ public class BasicNfcCommandLibrary implements CommandFamily {
 
             case TagFoundResponse.COMMAND_CODE:
                 parsedMessage = new TagFoundResponse();
+                break;
+
+            case SignedTagFoundResponse.COMMAND_CODE:
+                parsedMessage = new SignedTagFoundResponse();
                 break;
 
             case TagWrittenResponse.COMMAND_CODE:
