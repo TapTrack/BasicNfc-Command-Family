@@ -57,7 +57,7 @@ ext.bintrayCfg = [
 
         publishedArtifacts : [
                 basicNfcCommandFamily: [
-                        bintrayName : 'commandfamily-basicnfc',
+                        bintrayName : 'commandfamily-basicnfc-2',
                         libraryName : 'Basic Nfc TCMP Command Family',
                         artifact : 'commandfamily-basicnfc',
                         libraryDescription : 'Command family for performing basic NFC operations',
