@@ -3,6 +3,10 @@
 buildscript {
     repositories {
         jcenter()
+        maven {
+            url 'https://maven.google.com/'
+            name 'Google'
+        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.2.1'
@@ -20,6 +24,10 @@ allprojects {
             //for demo app
             url "https://jitpack.io"
         }
+        maven {
+            url 'https://maven.google.com/'
+            name 'Google'
+        }
     }
 }
 
@@ -34,11 +42,11 @@ task clean(type: Delete) {
 }
 
 ext.globalCfg = [
-        minSdkVersion: 18,
+        minSdkVersion: 19,
         compileSdkVersion: 23,
         buildToolsVersion: "23.0.2",
-        publishedVersion: "0.10.0",
-        publishedGroupId : 'com.taptrack.tcmptappy',
+        publishedVersion: "2.0.0",
+        publishedGroupId : 'com.taptrack.tcmptappy2',
 ]
 
 ext.bintrayCfg = [
@@ -72,7 +80,7 @@ ext.bintrayCfg = [
 ext.libraries = [
         androidSupportAnnotations: "com.android.support:support-annotations:23.1.1",
         // common libraries
-        tcmpCommandFamilyCommon : "com.taptrack.tcmptappy:commandfamily-common:0.8.1",
+        tcmpCommandFamilyCommon : "com.taptrack.tcmptappy2:tcmp:2.0.0-beta2",
         tcmpTappyConstants : "com.taptrack.tcmptappy:tappy-constants:0.8.1",
         robolectric : "org.robolectric:robolectric:3.3",
 
