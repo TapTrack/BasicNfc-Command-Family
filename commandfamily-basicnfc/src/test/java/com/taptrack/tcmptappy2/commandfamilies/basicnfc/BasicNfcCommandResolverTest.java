@@ -1,8 +1,9 @@
 package com.taptrack.tcmptappy2.commandfamilies.basicnfc;
 
 import com.taptrack.tcmptappy.commandfamilies.basicnfc.BuildConfig;
-import com.taptrack.tcmptappy2.commandfamilies.basicnfc.AbstractBasicNfcMessage;
-import com.taptrack.tcmptappy2.commandfamilies.basicnfc.BasicNfcCommandResolver;
+import com.taptrack.tcmptappy2.MalformedPayloadException;
+import com.taptrack.tcmptappy2.TCMPMessage;
+import com.taptrack.tcmptappy2.commandfamilies.basicnfc.commands.AutoPollCommand;
 import com.taptrack.tcmptappy2.commandfamilies.basicnfc.commands.DispatchTagsCommand;
 import com.taptrack.tcmptappy2.commandfamilies.basicnfc.commands.GetBasicNfcLibraryVersionCommand;
 import com.taptrack.tcmptappy2.commandfamilies.basicnfc.commands.LockTagCommand;
@@ -14,6 +15,8 @@ import com.taptrack.tcmptappy2.commandfamilies.basicnfc.commands.StreamTagsComma
 import com.taptrack.tcmptappy2.commandfamilies.basicnfc.commands.WriteNdefCustomMessageCommand;
 import com.taptrack.tcmptappy2.commandfamilies.basicnfc.commands.WriteNdefTextRecordCommand;
 import com.taptrack.tcmptappy2.commandfamilies.basicnfc.commands.WriteNdefUriRecordCommand;
+import com.taptrack.tcmptappy2.commandfamilies.basicnfc.responses.AutoPollTagEnteredResponse;
+import com.taptrack.tcmptappy2.commandfamilies.basicnfc.responses.AutoPollTagExitedResponse;
 import com.taptrack.tcmptappy2.commandfamilies.basicnfc.responses.BasicNfcErrorResponse;
 import com.taptrack.tcmptappy2.commandfamilies.basicnfc.responses.BasicNfcLibraryVersionResponse;
 import com.taptrack.tcmptappy2.commandfamilies.basicnfc.responses.NdefFoundResponse;
@@ -22,8 +25,6 @@ import com.taptrack.tcmptappy2.commandfamilies.basicnfc.responses.SignedTagFound
 import com.taptrack.tcmptappy2.commandfamilies.basicnfc.responses.TagFoundResponse;
 import com.taptrack.tcmptappy2.commandfamilies.basicnfc.responses.TagLockedResponse;
 import com.taptrack.tcmptappy2.commandfamilies.basicnfc.responses.TagWrittenResponse;
-import com.taptrack.tcmptappy2.MalformedPayloadException;
-import com.taptrack.tcmptappy2.TCMPMessage;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -90,6 +91,7 @@ public class BasicNfcCommandResolverTest {
         assertTrue(testCommandSupported(new WriteNdefUriRecordCommand(), WriteNdefUriRecordCommand.class));
         assertTrue(testCommandSupported(new LockTagCommand(), LockTagCommand.class));
         assertTrue(testCommandSupported(new DispatchTagsCommand(), DispatchTagsCommand.class));
+        assertTrue(testCommandSupported(new AutoPollCommand(), AutoPollCommand.class));
 
         assertFalse(testCommandSupported(new FakeCommand(),FakeCommand.class));
     }
@@ -116,6 +118,8 @@ public class BasicNfcCommandResolverTest {
         assertTrue(testResponseSupported(new SignedTagFoundResponse(), SignedTagFoundResponse.class));
         assertTrue(testResponseSupported(new TagWrittenResponse(),TagWrittenResponse.class));
         assertTrue(testResponseSupported(new TagLockedResponse(), TagLockedResponse.class));
+        assertTrue(testResponseSupported(new AutoPollTagExitedResponse(), AutoPollTagExitedResponse.class));
+        assertTrue(testResponseSupported(new AutoPollTagEnteredResponse(), AutoPollTagEnteredResponse.class));
 
         assertFalse(testResponseSupported(new FakeResponse(), FakeResponse.class));
     }

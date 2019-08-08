@@ -20,6 +20,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.Size;
 
+import com.taptrack.tcmptappy2.CommandFamilyMessageResolver;
+import com.taptrack.tcmptappy2.MalformedPayloadException;
+import com.taptrack.tcmptappy2.TCMPMessage;
+import com.taptrack.tcmptappy2.commandfamilies.basicnfc.commands.AutoPollCommand;
 import com.taptrack.tcmptappy2.commandfamilies.basicnfc.commands.DispatchTagsCommand;
 import com.taptrack.tcmptappy2.commandfamilies.basicnfc.commands.GetBasicNfcLibraryVersionCommand;
 import com.taptrack.tcmptappy2.commandfamilies.basicnfc.commands.LockTagCommand;
@@ -31,6 +35,8 @@ import com.taptrack.tcmptappy2.commandfamilies.basicnfc.commands.StreamTagsComma
 import com.taptrack.tcmptappy2.commandfamilies.basicnfc.commands.WriteNdefCustomMessageCommand;
 import com.taptrack.tcmptappy2.commandfamilies.basicnfc.commands.WriteNdefTextRecordCommand;
 import com.taptrack.tcmptappy2.commandfamilies.basicnfc.commands.WriteNdefUriRecordCommand;
+import com.taptrack.tcmptappy2.commandfamilies.basicnfc.responses.AutoPollTagEnteredResponse;
+import com.taptrack.tcmptappy2.commandfamilies.basicnfc.responses.AutoPollTagExitedResponse;
 import com.taptrack.tcmptappy2.commandfamilies.basicnfc.responses.BasicNfcErrorResponse;
 import com.taptrack.tcmptappy2.commandfamilies.basicnfc.responses.BasicNfcLibraryVersionResponse;
 import com.taptrack.tcmptappy2.commandfamilies.basicnfc.responses.NdefFoundResponse;
@@ -39,9 +45,6 @@ import com.taptrack.tcmptappy2.commandfamilies.basicnfc.responses.SignedTagFound
 import com.taptrack.tcmptappy2.commandfamilies.basicnfc.responses.TagFoundResponse;
 import com.taptrack.tcmptappy2.commandfamilies.basicnfc.responses.TagLockedResponse;
 import com.taptrack.tcmptappy2.commandfamilies.basicnfc.responses.TagWrittenResponse;
-import com.taptrack.tcmptappy2.CommandFamilyMessageResolver;
-import com.taptrack.tcmptappy2.MalformedPayloadException;
-import com.taptrack.tcmptappy2.TCMPMessage;
 
 import java.util.Arrays;
 
@@ -105,6 +108,10 @@ public class BasicNfcCommandResolver implements CommandFamilyMessageResolver {
                 parsedMessage = new DispatchTagsCommand();
                 break;
 
+            case AutoPollCommand.COMMAND_CODE:
+                parsedMessage = new AutoPollCommand();
+                break;
+
             default:
                 return null;
         }
@@ -149,6 +156,14 @@ public class BasicNfcCommandResolver implements CommandFamilyMessageResolver {
 
             case TagLockedResponse.COMMAND_CODE:
                 parsedMessage = new TagLockedResponse();
+                break;
+
+            case AutoPollTagEnteredResponse.COMMAND_CODE:
+                parsedMessage = new AutoPollTagEnteredResponse();
+                break;
+
+            case AutoPollTagExitedResponse.COMMAND_CODE:
+                parsedMessage = new AutoPollTagExitedResponse();
                 break;
 
             default:

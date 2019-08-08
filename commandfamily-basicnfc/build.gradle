@@ -27,10 +27,11 @@ android {
 }
 
 dependencies {
-    compile libraries.tcmpCommandFamilyCommon
-    compile libraries.tcmpTappyConstants
-    testCompile libraries.junit
-    testCompile libraries.robolectric
+    api libraries.tcmpCommandFamilyCommon
+    api libraries.androidSupportAnnotations
+    api libraries.tcmpTappyConstants
+    testImplementation libraries.junit
+    testImplementation libraries.robolectric
 }
 
 archivesBaseName = bintrayCfg.publishedArtifacts.basicNfcCommandFamily.artifact
