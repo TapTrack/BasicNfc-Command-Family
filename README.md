@@ -1,11 +1,11 @@
 # Basic NFC Command Family
 Basic NFC command family for Tappy devices.
 
-[ ![Download](https://api.bintray.com/packages/taptrack/maven/commandfamily-basicnfc/images/download.svg) ](https://bintray.com/taptrack/maven/commandfamily-basicnfc/_latestVersion)
+[ ![Download](https://api.bintray.com/packages/taptrack/maven/commandfamily-basicnfc-2/images/download.svg) ](https://bintray.com/taptrack/maven/commandfamily-basicnfc-2/_latestVersion)
 
 For projects using the latest Android Tappy SDK, you should use the artifact:
 ```groovy
-compile "com.taptrack.tcmptappy2:commandfamily-basicnfc:2.0.1"
+compile "com.taptrack.tcmptappy2:commandfamily-basicnfc:2.1.0"
 ```
 
 If your project is based on the older, deprecated TappyBLE SDK, the latest
